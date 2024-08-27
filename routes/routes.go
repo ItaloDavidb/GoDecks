@@ -1,14 +1,14 @@
 package routes
 
 import (
-	"log"
-	"net/http"
-
 	"github.com/gorilla/mux"
+	"github.com/italodavidb/goCrud/controllers"
 )
 
-func LoadRoutes() {
+func LoadRoutes() *mux.Router {
 	router := mux.NewRouter()
-	router.HandleFunc("/", nil).Methods("GET")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	router.HandleFunc("/api/Cards", controllers.CreateCard).Methods("POST")
+	router.HandleFunc("/api/Cards", controllers.FindAllCards).Methods("GET")
+	router.HandleFunc("/api/Cards/search", controllers.FindCards).Methods("GET")
+	return router
 }

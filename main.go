@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"net/http"
 
 	"github.com/italodavidb/goCrud/database"
 	"github.com/italodavidb/goCrud/routes"
@@ -10,5 +12,6 @@ import (
 func main() {
 	fmt.Println("Server on")
 	database.ConnectToDb()
-	routes.LoadRoutes()
+	router := routes.LoadRoutes()
+	log.Fatal(http.ListenAndServe(":8080", router))
 }
