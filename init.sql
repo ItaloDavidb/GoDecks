@@ -13,7 +13,9 @@ CREATE TABLE cards (
     name VARCHAR(100),
     type VARCHAR(50),
     json_data JSONB,
-    PRIMARY KEY (set_code, number)
+    PRIMARY KEY (set_code, number),
+    -- Índice para facilitar buscas pelo nome da carta
+    INDEX idx_name ON cards(name)
 );
 
 -- Criação da tabela de cartas de usuário
@@ -32,7 +34,6 @@ CREATE TABLE decks (
     id SERIAL PRIMARY KEY,
     user_id INT,
     name VARCHAR(100),
-    PRIMARY KEY (id),
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
