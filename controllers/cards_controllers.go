@@ -83,3 +83,33 @@ func DeleteCards(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusNoContent)
 }
+
+func UpdateCard(w http.ResponseWriter, r *http.Request) {
+	setCode := r.URL.Query().Get("set_code")
+	number := r.URL.Query().Get("number")
+
+	var card models.Card
+
+	query := database.DB.Model(&models.Card{})
+
+	if setCode != "" {
+		query = query.Where("set_code = ?", setCode)
+	}
+	if number != "" {
+		query = query.Where("number = ?", number)
+	}
+
+	result := query.Find(&card)
+	if result.Error != nil {
+		http.Error(w, result.Error.Error(), http.StatusInternalServerError)
+		return
+	}
+	if err := json.NewDecoder(r.Body).Decode(&card); err != nil {
+		http.Error(w, "Invalid request payload", http.StatusBadRequest)
+		return
+	}
+
+	database.DB.Save(&card)
+
+	json.NewEncoder(w).Encode(card)
+}
