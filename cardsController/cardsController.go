@@ -1,4 +1,4 @@
-package cards_controllers
+package cardsController
 
 import (
 	"encoding/json"

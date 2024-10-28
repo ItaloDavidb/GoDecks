@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
@@ -10,8 +9,12 @@ import (
 )
 
 func main() {
-	fmt.Println("Server on")
 	database.ConnectToDb()
 	router := routes.LoadRoutes()
-	log.Fatal(http.ListenAndServe(":8080", router))
+
+	log.Println("Iniciando o servidor na porta 8080...")
+	err := http.ListenAndServe(":8080", router)
+	if err != nil {
+		log.Fatalf("Erro ao iniciar o servidor: %v", err)
+	}
 }
