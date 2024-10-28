@@ -4,8 +4,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/italodavidb/goCrud/database"
-	"github.com/italodavidb/goCrud/routes"
+	"github.com/italodavidb/goCrud/internal/database"
+	"github.com/italodavidb/goCrud/internal/routes"
 )
 
 func main() {

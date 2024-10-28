@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/italodavidb/goCrud/database"
-	"github.com/italodavidb/goCrud/models"
+	"github.com/italodavidb/goCrud/internal/database"
+	"github.com/italodavidb/goCrud/internal/models"
 )
 
 func CreateCard(w http.ResponseWriter, r *http.Request) {
