@@ -16,6 +16,8 @@ func LoadRoutes() *mux.Router {
 	router.HandleFunc("/api/Users", usersController.CreateUser).Methods("POST")
 	router.HandleFunc("/api/Users", usersController.FindAllUsers).Methods("GET")
 	router.HandleFunc("/api/Users/Search", usersController.FindUser).Methods("GET")
+	router.HandleFunc("/api/Users", usersController.DeleteUser).Methods("DELETE")
+	router.HandleFunc("/api/Users/Update", usersController.UpdateUser).Methods("PUT")
 	// router.HandleFunc("/api/Register", users_controllers.CreateUser).Methods("POST")
 	// router.HandleFunc("/api/Login", users_controllers.Login).Methods("POST")
 	return router
