@@ -2,6 +2,7 @@ package services
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/italodavidb/goCrud/internal/models"
 	"github.com/italodavidb/goCrud/internal/repository"
@@ -17,7 +18,7 @@ func CreateUser(newUser models.User) (models.User, error) {
 
 	err = repository.CreateUser(newUser)
 	if err != nil {
-		return models.User{}, err // Retorna erro se falhar na criação
+		return models.User{}, err
 	}
 	newUser.Password = ""
 	return newUser, nil
@@ -44,4 +45,38 @@ func FindUser(username string) (*models.User, error) {
 	}
 
 	return user, nil
+}
+
+func DeleteUser(username string) error {
+	if err := repository.DeleteUser(username); err != nil {
+		return err
+	}
+	return nil
+}
+
+func UpdateUser(username string, user models.User) (models.User, error) {
+	existingUser, err := FindUser(username)
+	if err != nil {
+		return models.User{}, fmt.Errorf("usuário não encontrado: %w", err)
+	}
+	updated := false
+	if user.Username != "" && user.Username != existingUser.Username {
+		existingUser.Username = user.Username
+		updated = true
+	}
+	if user.Email != "" && user.Email != existingUser.Email {
+		existingUser.Email = user.Email
+		updated = true
+	}
+
+	if !updated {
+		return *existingUser, nil
+	}
+
+	updatedUser, err := repository.UpdateUser(existingUser)
+	if err != nil {
+		return models.User{}, fmt.Errorf("erro ao atualizar usuário: %w", err)
+	}
+
+	return *updatedUser, nil
 }
