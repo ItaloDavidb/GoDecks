@@ -6,6 +6,7 @@ import (
 
 	"github.com/italodavidb/goCrud/internal/database"
 	"github.com/italodavidb/goCrud/internal/models"
+	"github.com/italodavidb/goCrud/internal/services"
 )
 
 func CreateCard(w http.ResponseWriter, r *http.Request) {
@@ -19,49 +20,37 @@ func CreateCard(w http.ResponseWriter, r *http.Request) {
 		}
 		newCards = append(newCards, singleCard)
 	}
-
-	for _, card := range newCards {
-		if err := database.DB.Create(&card).Error; err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
+	cards, err := services.CreateCard(newCards)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 
-	json.NewEncoder(w).Encode(newCards)
+	json.NewEncoder(w).Encode(cards)
 }
 
 func FindAllCards(w http.ResponseWriter, r *http.Request) {
-	var c []models.Card
-	database.DB.Find(&c)
-	json.NewEncoder(w).Encode(c)
+	var cards []models.Card
+	cards, err := services.FindAllCards()
+	if err != nil {
+		http.Error(w, "Server Error", http.StatusInternalServerError)
+	}
+	json.NewEncoder(w).Encode(cards)
 }
 
 func FindCards(w http.ResponseWriter, r *http.Request) {
 	name := r.URL.Query().Get("name")
-	setCode := r.URL.Query().Get("set_code")
+	setCode := r.URL.Query().Get("setCode")
 	number := r.URL.Query().Get("number")
 
-	var cards []models.Card
+	cards, err := services.FindCards(name, setCode, number)
 
-	query := database.DB.Model(&models.Card{})
-
-	if name != "" {
-		query = query.Where("name ILIKE ?", "%"+name+"%")
-	}
-	if setCode != "" {
-		query = query.Where("set_code = ?", setCode)
-	}
-	if number != "" {
-		query = query.Where("number = ?", number)
-	}
-
-	result := query.Find(&cards)
-	if result.Error != nil {
-		http.Error(w, result.Error.Error(), http.StatusInternalServerError)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	json.NewEncoder(w).Encode(cards[0])
+	json.NewEncoder(w).Encode(&cards)
 }
 
 func DeleteCards(w http.ResponseWriter, r *http.Request) {
@@ -85,7 +74,7 @@ func DeleteCards(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdateCard(w http.ResponseWriter, r *http.Request) {
-	setCode := r.URL.Query().Get("set_code")
+	setCode := r.URL.Query().Get("setCode")
 	number := r.URL.Query().Get("number")
 
 	var card models.Card

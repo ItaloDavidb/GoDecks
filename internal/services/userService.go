@@ -48,6 +48,9 @@ func FindUser(username string) (*models.User, error) {
 }
 
 func DeleteUser(username string) error {
+	if username == "" {
+		return errors.New("username is necessary")
+	}
 	if err := repository.DeleteUser(username); err != nil {
 		return err
 	}
