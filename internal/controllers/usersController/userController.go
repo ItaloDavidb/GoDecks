@@ -4,11 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/italodavidb/goCrud/internal/database"
 	"github.com/italodavidb/goCrud/internal/models"
-	"github.com/italodavidb/goCrud/internal/repository"
 	"github.com/italodavidb/goCrud/internal/services"
-	"github.com/italodavidb/goCrud/internal/utils/errorUtils"
 )
 
 func CreateUser(w http.ResponseWriter, r *http.Request) {
@@ -20,10 +17,9 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 
 	createdUser, err := services.CreateUser(newUser)
 	if err != nil {
-		// Verifica o tipo de erro retornado
 		switch err.Error() {
 		case "usuário já existe":
-			http.Error(w, "Usuário já existe", http.StatusConflict) // 409 Conflict
+			http.Error(w, "Usuário já existe", http.StatusConflict)
 			return
 		default:
 			http.Error(w, "Erro ao criar usuário", http.StatusInternalServerError)
@@ -31,9 +27,8 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	// Se a criação for bem-sucedida
 	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(createdUser) // Opcional: Retorna o novo usuário
+	json.NewEncoder(w).Encode(createdUser)
 
 }
 
@@ -64,18 +59,20 @@ func DeleteUser(w http.ResponseWriter, r *http.Request) {
 	if username == "" {
 		http.Error(w, "Username is Required", http.StatusBadRequest)
 	}
-	if err := database.DB.Where("username = ?", username).Delete(&models.User{}).Error; err != nil {
-		errorUtils.HandleUserFetchError(w, err)
-		return
+	err := services.DeleteUser(username)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
+
 	w.WriteHeader(http.StatusNoContent)
 }
 
 func UpdateUser(w http.ResponseWriter, r *http.Request) {
 	var user models.User
 	username := r.URL.Query().Get("username")
+
 	if username == "" {
-		http.Error(w, "Username is Required", http.StatusBadRequest)
+		http.Error(w, "Username is required", http.StatusBadRequest)
 		return
 	}
 
@@ -85,25 +82,13 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	existingUser, err := repository.FetchUser(username)
+	updatedUser, err := services.UpdateUser(username, user)
+	updatedUser.Password = ""
 	if err != nil {
-		errorUtils.HandleUserFetchError(w, err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	if user.Username != "" {
-		existingUser.Username = user.Username
-	}
-	if user.Email != "" {
-		existingUser.Email = user.Email
-	}
-
-	if err := database.DB.Save(existingUser).Error; err != nil {
-		http.Error(w, "Error updating user", http.StatusInternalServerError)
-		return
-	}
-
-	existingUser.Password = ""
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(existingUser)
+	json.NewEncoder(w).Encode(updatedUser)
 }

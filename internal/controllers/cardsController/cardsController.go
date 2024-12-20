@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/italodavidb/goCrud/internal/database"
 	"github.com/italodavidb/goCrud/internal/models"
+	"github.com/italodavidb/goCrud/internal/services"
 )
 
 func CreateCard(w http.ResponseWriter, r *http.Request) {
@@ -19,54 +19,47 @@ func CreateCard(w http.ResponseWriter, r *http.Request) {
 		}
 		newCards = append(newCards, singleCard)
 	}
-
-	for _, card := range newCards {
-		if err := database.DB.Create(&card).Error; err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
+	cards, err := services.CreateCard(newCards)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 
-	json.NewEncoder(w).Encode(newCards)
+	json.NewEncoder(w).Encode(cards)
 }
 
 func FindAllCards(w http.ResponseWriter, r *http.Request) {
-	var c []models.Card
-	database.DB.Find(&c)
-	json.NewEncoder(w).Encode(c)
+	var cards []models.Card
+	cards, err := services.FindAllCards()
+	if err != nil {
+		http.Error(w, "Server Error", http.StatusInternalServerError)
+	}
+	json.NewEncoder(w).Encode(cards)
 }
 
 func FindCards(w http.ResponseWriter, r *http.Request) {
 	name := r.URL.Query().Get("name")
-	setCode := r.URL.Query().Get("set_code")
+	setCode := r.URL.Query().Get("setCode")
 	number := r.URL.Query().Get("number")
 
-	var cards []models.Card
+	cards, err := services.FindCards(name, setCode, number)
 
-	query := database.DB.Model(&models.Card{})
-
-	if name != "" {
-		query = query.Where("name ILIKE ?", "%"+name+"%")
-	}
-	if setCode != "" {
-		query = query.Where("set_code = ?", setCode)
-	}
-	if number != "" {
-		query = query.Where("number = ?", number)
-	}
-
-	result := query.Find(&cards)
-	if result.Error != nil {
-		http.Error(w, result.Error.Error(), http.StatusInternalServerError)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	json.NewEncoder(w).Encode(cards[0])
+	json.NewEncoder(w).Encode(&cards)
 }
 
 func DeleteCards(w http.ResponseWriter, r *http.Request) {
+	type CardPayload struct {
+		SetCode string `json:"SetCode"`
+		Number  string `json:"Number"`
+	}
+
 	var payload struct {
-		Cards []string `json:"cards"`
+		Cards []CardPayload `json:"cards"`
 	}
 
 	if err := json.NewDecoder(r.Body).Decode(&payload); err != nil {
@@ -74,42 +67,43 @@ func DeleteCards(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	for _, setcodeNumber := range payload.Cards {
-		setCode := setcodeNumber[:3]
-		number := setcodeNumber[3:]
+	var cards []models.Card
+	for _, card := range payload.Cards {
+		if card.SetCode == "" || card.Number == "" {
+			http.Error(w, "Each card must have a SetCode and Number", http.StatusBadRequest)
+			return
+		}
+		cards = append(cards, models.Card{
+			SetCode: card.SetCode,
+			Number:  card.Number,
+		})
+	}
 
-		database.DB.Where("set_code = ? AND number = ?", setCode, number).Delete(&models.Card{})
+	err := services.DeleteCards(cards)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 
 	w.WriteHeader(http.StatusNoContent)
 }
 
 func UpdateCard(w http.ResponseWriter, r *http.Request) {
-	setCode := r.URL.Query().Get("set_code")
+	setCode := r.URL.Query().Get("setCode")
 	number := r.URL.Query().Get("number")
 
-	var card models.Card
-
-	query := database.DB.Model(&models.Card{})
-
-	if setCode != "" {
-		query = query.Where("set_code = ?", setCode)
-	}
-	if number != "" {
-		query = query.Where("number = ?", number)
-	}
-
-	result := query.Find(&card)
-	if result.Error != nil {
-		http.Error(w, result.Error.Error(), http.StatusInternalServerError)
-		return
-	}
-	if err := json.NewDecoder(r.Body).Decode(&card); err != nil {
+	var updatedCard models.Card
+	if err := json.NewDecoder(r.Body).Decode(&updatedCard); err != nil {
 		http.Error(w, "Invalid request payload", http.StatusBadRequest)
 		return
 	}
 
-	database.DB.Save(&card)
+	card, err := services.UpdateCard(setCode, number, updatedCard)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 
+	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(card)
 }

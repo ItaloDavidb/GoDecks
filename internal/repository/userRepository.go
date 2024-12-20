@@ -29,3 +29,17 @@ func FindAllUsers() ([]models.User, error) {
 	}
 	return users, nil
 }
+
+func DeleteUser(username string) error {
+	if err := database.DB.Where("username = ?", username).Delete(&models.User{}).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+func UpdateUser(existingUser *models.User) (*models.User, error) {
+	if err := database.DB.Save(&existingUser).Error; err != nil {
+		return nil, err
+	}
+	return existingUser, nil
+}
