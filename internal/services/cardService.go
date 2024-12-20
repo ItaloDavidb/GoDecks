@@ -1,11 +1,13 @@
 package services
 
 import (
+	"errors"
 	"fmt"
 	"strings"
 
 	"github.com/italodavidb/goCrud/internal/models"
 	"github.com/italodavidb/goCrud/internal/repository"
+	"gorm.io/gorm"
 )
 
 func CreateCard(cards []models.Card) ([]models.Card, error) {
@@ -38,7 +40,7 @@ func FindAllCards() ([]models.Card, error) {
 	return cards, nil
 }
 
-func FindCards(name, setCode, number string) (*models.Card, error) {
+func FindCards(name string, setCode string, number string) (*models.Card, error) {
 	if name == "" && setCode == "" && number == "" {
 		return nil, fmt.Errorf("nenhum parâmetro de filtro foi fornecido")
 	}
@@ -49,4 +51,42 @@ func FindCards(name, setCode, number string) (*models.Card, error) {
 	return cards, nil
 }
 
-// func DeleteCards()
+func DeleteCards(cards []models.Card) error {
+	for _, card := range cards {
+		err := repository.DeleteCardBySetCodeAndNumber(card.SetCode, card.Number)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func UpdateCard(setCode string, number string, updatedCard models.Card) (models.Card, error) {
+	card, err := repository.FindCardBySetCodeAndNumber(setCode, number)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return models.Card{}, errors.New("card not found")
+		}
+		return models.Card{}, err
+	}
+
+	if updatedCard.Name != "" {
+		card.Name = updatedCard.Name
+	}
+	if updatedCard.Number != "" {
+		card.Number = updatedCard.Number
+	}
+	if updatedCard.SetCode != "" {
+		card.SetCode = updatedCard.SetCode
+	}
+	if updatedCard.Type != "" {
+		card.Type = updatedCard.Type
+	}
+
+	err = repository.SaveCard(&card)
+	if err != nil {
+		return models.Card{}, err
+	}
+
+	return card, nil
+}

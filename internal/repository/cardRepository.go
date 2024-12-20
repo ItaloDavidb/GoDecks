@@ -40,3 +40,26 @@ func FindCards(name, setCode, number string) (*models.Card, error) {
 	}
 	return &cards, nil
 }
+func FindCardBySetCodeAndNumber(setCode string, number string) (models.Card, error) {
+	var card models.Card
+
+	query := database.DB.Model(&models.Card{})
+	if setCode != "" {
+		query = query.Where("set_code = ?", setCode)
+	}
+	if number != "" {
+		query = query.Where("number = ?", number)
+	}
+
+	result := query.First(&card)
+	return card, result.Error
+}
+
+func SaveCard(card *models.Card) error {
+	result := database.DB.Save(card)
+	return result.Error
+}
+func DeleteCardBySetCodeAndNumber(setCode string, number string) error {
+	result := database.DB.Where("set_code = ? AND number = ?", setCode, number).Delete(&models.Card{})
+	return result.Error
+}
