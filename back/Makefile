@@ -25,8 +25,8 @@ docker-run: docker-build
 
 # Usar Docker Compose para orquestração
 docker-compose:
-	docker-compose up -d
+	docker compose up -d
 # Limpar binários e imagens temporárias
 clean:
 	rm -rf $(BIN_DIR)/*
-	docker-compose down --rmi all --volumes --remove-orphans
+	docker compose down --rmi all --volumes --remove-orphans
