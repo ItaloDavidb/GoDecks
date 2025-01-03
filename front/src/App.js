@@ -8,6 +8,7 @@ import logo from "./logo.svg";
 import "./App.css";
 import LoginForm from "./Components/LoginForm";
 import HomePage from "./Components/HomePage";
+import CreateUserForm from "./Components/CreateUserForm";
 function App() {
   const isAuthenticated = localStorage.getItem("token");
 
@@ -20,23 +21,21 @@ function App() {
             {/* Rota para a página de login */}
             <Route path="/login" element={<LoginForm />} />
 
-            {/* Rota para a página principal (após login), protegida */}
+            {/* Rota para criar um novo usuário */}
+            <Route path="/create-account" element={<CreateUserForm />} />
+
+            {/* Página inicial com redirecionamento baseado na autenticação */}
+            <Route
+              path="/"
+              element={<Navigate to={isAuthenticated ? "/home" : "/login"} />}
+            />
+
+            {/* Rota para a página principal (protegida) */}
             <Route
               path="/home"
               element={
                 isAuthenticated ? <HomePage /> : <Navigate to="/login" />
               }
-            />
-
-            {/* Página inicial (ou redirecionamento para login se não autenticado) */}
-            <Route
-              path="/home"
-              element={<Navigate to={isAuthenticated ? "/home" : "/login"} />}
-            />
-            {/* Página inicial */}
-            <Route
-              path="/"
-              element={<Navigate to={isAuthenticated ? "/home" : "/login"} />}
             />
           </Routes>
         </header>

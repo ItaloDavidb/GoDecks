@@ -1,4 +1,4 @@
-.login-form {
+.createUser-form {
   width: 500px;
   height: auto;
   margin-top: 5px;
@@ -20,7 +20,7 @@ form textarea {
   font-size: 14px;
 }
 
-.login-form h2 {
+.createUser-form h2 {
   text-align: left;
   font-size: 33.75px;
   color: #ded4af;
@@ -28,11 +28,11 @@ form textarea {
   margin-top: 0%;
 }
 
-.login-form div {
+.createUser-form div {
   margin-bottom: 0px;
 }
 
-.login-form label {
+.createUser-form label {
   display: block;
   font-weight: bold;
   text-align: left;
@@ -41,7 +41,7 @@ form textarea {
   margin-bottom: 0px;
 }
 
-.login-form input {
+.createUser-form input {
   width: 100%;
   padding: 8px;
   margin: 5px 0 10px 0;
@@ -50,12 +50,12 @@ form textarea {
   box-sizing: border-box;
 }
 
-.login-form-button {
+.createUser-form-button {
   display: flex;
   justify-content: space-between;
 }
 
-.login-form button {
+.createUser-form button {
   width: auto;
   padding: 15px;
   margin-top: 10px;
@@ -64,18 +64,18 @@ form textarea {
   border-radius: 4px;
   cursor: pointer;
 }
-.createAccount {
+.turnBack {
   background-color: #262b42;
 }
-.login {
+.createUser {
   background-color: #454e7e;
 }
 
-.login-form button:hover {
+.createUser-form button:hover {
   background-color: #8195de;
 }
 
-.login-form .error {
+.createUser-form .error {
   color: red;
   font-size: 14px;
   text-align: center;

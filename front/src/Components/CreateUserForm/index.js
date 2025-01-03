@@ -1,48 +1,49 @@
 import React, { useState } from "react";
-import "./LoginForm.css";
+import "./CreateUserForm.css";
 import { useNavigate } from "react-router-dom";
-function LoginForm() {
+function CreateUserForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const handleCreateAccountClick = () => {
-    navigate("/create-account");
+  const handleTurnBack = () => {
+    navigate("/login");
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:8080/api/Login", {
+      const response = await fetch("http://localhost:8080/api/Users", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
 
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ username, password, email }),
       });
 
       if (response.ok) {
         const data = await response.json();
         localStorage.setItem("token", data.token);
-        alert("Login bem-sucedido!");
-        navigate("/home");
+        alert("Usuário criado com sucesso!");
+        navigate("/login");
       } else {
-        setError("Nome de usuário ou senha incorretos");
+        setError("Houve algum problema ao criar este usuário tente novamente!");
       }
     } catch (error) {
-      setError("Erro ao tentar realizar o login");
+      setError("Erro ao tentar criar usuario");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="login-form">
-      <h2>Login</h2>
+    <div className="createUser-form">
+      <h2>Criar Usuário</h2>
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="username">Nome de usuário:</label>
@@ -64,17 +65,23 @@ function LoginForm() {
             placeholder="Digite sua senha"
           />
         </div>
+        <div>
+          <label htmlFor="email">Email:</label>
+          <input
+            type="email"
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Digite seu Email"
+          />
+        </div>
         {error && <div style={{ color: "red" }}>{error}</div>}{" "}
-        <div class="login-form-button">
-          <button type="submit" disabled={loading} className="login">
-            {loading ? "Carregando..." : "Entrar"}
+        <div class="createUser-form-button">
+          <button type="submit" disabled={loading} className="createUser">
+            {loading ? "Carregando..." : "Criar Usuário"}
           </button>
-          <button
-            type="button"
-            className="createAccount"
-            onClick={handleCreateAccountClick}
-          >
-            Criar Usuário
+          <button type="button" className="turnBack" onClick={handleTurnBack}>
+            Voltar
           </button>
         </div>
       </form>
@@ -82,4 +89,4 @@ function LoginForm() {
   );
 }
 
-export default LoginForm;
+export default CreateUserForm;
