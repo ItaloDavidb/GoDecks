@@ -10,11 +10,11 @@ type User struct {
 }
 
 type Card struct {
-	SetCode  string `gorm:"primaryKey;column:set_code"` // Defina explicitamente o nome da coluna
+	SetCode  string `gorm:"primaryKey;column:set_code"`
 	Number   string `gorm:"primaryKey"`
 	Name     string `json:"name"`
 	Type     string `json:"type"`
-	JsonData string `json:"jsonData" gorm:"column:json_data"` // Defina explicitamente o nome da coluna
+	JsonData string `json:"jsonData" gorm:"column:json_data"`
 }
 
 type UserCard struct {

@@ -21,7 +21,7 @@ func Login(user models.User) (string, error) {
 		return "", errors.New("senha incorreta")
 	}
 
-	expirationTime := time.Now().Add(5 * time.Minute)
+	expirationTime := time.Now().Add(10 * time.Minute)
 	claims := &jwtUtils.UserClaims{
 		Username: user.Username,
 		RegisteredClaims: jwt.RegisteredClaims{

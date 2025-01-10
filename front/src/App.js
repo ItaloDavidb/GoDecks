@@ -9,9 +9,8 @@ import "./App.css";
 import LoginForm from "./Components/LoginForm";
 import HomePage from "./Components/HomePage";
 import CreateUserForm from "./Components/CreateUserForm";
-function App() {
-  const isAuthenticated = localStorage.getItem("token");
 
+function App() {
   return (
     <Router>
       <div className="App">
@@ -25,18 +24,10 @@ function App() {
             <Route path="/create-account" element={<CreateUserForm />} />
 
             {/* Página inicial com redirecionamento baseado na autenticação */}
-            <Route
-              path="/"
-              element={<Navigate to={isAuthenticated ? "/home" : "/login"} />}
-            />
+            <Route path="/" element={<Navigate to={"/login"} />} />
 
             {/* Rota para a página principal (protegida) */}
-            <Route
-              path="/home"
-              element={
-                isAuthenticated ? <HomePage /> : <Navigate to="/login" />
-              }
-            />
+            <Route path="/home" element={<HomePage />} />
           </Routes>
         </header>
       </div>
