@@ -35,6 +35,6 @@ func JwtMiddleware(next http.Handler) http.Handler {
 			r.Header.Set("Username", claims.Username)
 		}
 
-		next.ServeHTTP(w, r)
+		next.ServeHTTP(w, r) //check later
 	})
 }

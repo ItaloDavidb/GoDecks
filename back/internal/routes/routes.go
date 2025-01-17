@@ -24,6 +24,7 @@ func LoadRoutes() *mux.Router {
 	api.HandleFunc("/Users/Search", usersController.FindUser).Methods("GET")
 	api.HandleFunc("/Users", usersController.DeleteUser).Methods("DELETE")
 	api.HandleFunc("/Users/Update", usersController.UpdateUser).Methods("PUT")
+	api.HandleFunc("/Auth", loginController.Auth).Methods("POST")
 
 	return router
 }

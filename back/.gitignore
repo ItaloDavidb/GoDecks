@@ -1,0 +1,47 @@
+# Diretórios e arquivos criados pelo Go
+/bin/
+/pkg/
+/vendor/
+
+# Dependências do Go Modules
+go.sum
+
+# Executáveis
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Arquivos de cache e temporários
+*.log
+*.out
+*.tmp
+*.test
+
+# Diretórios de cache criados por ferramentas de build
+.idea/
+.DS_Store
+*.swp
+
+# Configurações locais e backups
+*.local
+*.bak
+*.old
+*.swp
+*.swo
+
+# Arquivos do sistema
+Thumbs.db
+*.DS_Store
+
+# Arquivos gerados pelo debugger
+*.prof
+*.trace
+*.pprof
+
+# Docker e outros arquivos relacionados à infraestrutura
+docker-compose.override.yml
+
+# Diretórios específicos do usuário
+.env
+data/
