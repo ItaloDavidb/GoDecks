@@ -7,7 +7,7 @@ import {
 import logo from "./logo.svg";
 import "./App.css";
 import LoginForm from "./Components/LoginForm";
-import HomePage from "./Components/HomePage";
+import Dashboard from "./Components/Dashboard";
 import CreateUserForm from "./Components/CreateUserForm";
 
 function App() {
@@ -27,7 +27,7 @@ function App() {
             <Route path="/" element={<Navigate to={"/login"} />} />
 
             {/* Rota para a página principal (protegida) */}
-            <Route path="/home" element={<HomePage />} />
+            <Route path="/home" element={<Dashboard />} />
           </Routes>
         </header>
       </div>

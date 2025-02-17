@@ -1,0 +1,57 @@
+.dashboard {
+    padding: 15px;
+    font-family: Arial, sans-serif;
+    max-width: 400px; /* Layout mais compacto */
+    margin: 0 auto;
+    background-color: #fff; /* Fundo branco total */
+  }
+  
+  .dashboard h1 {
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #eee; /* Linha sutil abaixo do título */
+    padding-bottom: 10px;
+  }
+  
+  .dashboard-section {
+    margin-bottom: 12px;
+    padding: 0; /* Remove padding interno */
+  }
+  
+  .dashboard-section h2 {
+    font-size: 16px;
+    color: #333;
+    margin: 0;
+    font-weight: bold; /* Títulos em negrito */
+  }
+  
+  .dashboard-section p {
+    font-size: 14px;
+    color: #666;
+    margin: 5px 0;
+  }
+  
+  button {
+    padding: 6px 12px;
+    background-color: #4CAF50; /* Verde para os botões (como exemplo) */
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 12px;
+    margin-top: 8px;
+  }
+  
+  button:hover {
+    background-color: #45a049; /* Verde mais escuro */
+  }
+  
+  .search-section input {
+    padding: 8px;
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    font-size: 14px;
+    margin-top: 15px;
+  }
