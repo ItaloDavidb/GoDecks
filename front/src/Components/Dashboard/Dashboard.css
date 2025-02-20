@@ -1,57 +1,289 @@
 .dashboard {
-    padding: 15px;
-    font-family: Arial, sans-serif;
-    max-width: 400px; /* Layout mais compacto */
-    margin: 0 auto;
-    background-color: #fff; /* Fundo branco total */
-  }
-  
-  .dashboard h1 {
-    font-size: 20px;
-    color: #333;
-    margin-bottom: 15px;
-    border-bottom: 1px solid #eee; /* Linha sutil abaixo do título */
-    padding-bottom: 10px;
-  }
-  
-  .dashboard-section {
-    margin-bottom: 12px;
-    padding: 0; /* Remove padding interno */
-  }
-  
-  .dashboard-section h2 {
-    font-size: 16px;
-    color: #333;
-    margin: 0;
-    font-weight: bold; /* Títulos em negrito */
-  }
-  
-  .dashboard-section p {
-    font-size: 14px;
-    color: #666;
-    margin: 5px 0;
-  }
-  
-  button {
-    padding: 6px 12px;
-    background-color: #4CAF50; /* Verde para os botões (como exemplo) */
-    color: white;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-    font-size: 12px;
-    margin-top: 8px;
-  }
-  
-  button:hover {
-    background-color: #45a049; /* Verde mais escuro */
-  }
-  
-  .search-section input {
-    padding: 8px;
-    width: 100%;
-    border: 1px solid #ddd;
-    border-radius: 3px;
-    font-size: 14px;
-    margin-top: 15px;
-  }
+  color: #faf7d5;
+  background-color: #42362d;
+  min-width: 800px;
+  /* Largura mínima */
+  max-width: 1200px;
+  /* Largura máxima */
+  width: 90%;
+  /* Faz o dashboard se ajustar à largura da tela */
+  height: auto;
+  margin: 20px auto;
+  /* Centraliza o dashboard na tela */
+  padding: 20px;
+  /* Padding interno reduzido */
+  border-radius: 12px;
+  /* Cantos mais arredondados */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  /* Sombra mais suave */
+  border: none;
+  /* Remove a borda branca */
+  display: grid;
+  grid-template-columns: 1fr auto;
+  /* Duas colunas: título e search */
+  grid-template-rows: auto auto auto auto;
+  /* Linhas automáticas */
+  gap: 15px;
+  /* Espaçamento entre as seções */
+}
+
+.dashboard h1 {
+  grid-column: 1;
+  /* Título na primeira coluna */
+  text-align: left;
+  margin: 0;
+  padding: 0;
+  font-size: 32px;
+  /* Tamanho da fonte do título */
+  padding-bottom: 15px;
+  /* Espaçamento abaixo do título */
+}
+
+.search-section {
+  grid-column: 2; /* Search na segunda coluna (canto superior direito) */
+  display: flex;
+  align-items: center; /* Alinha verticalmente os itens no centro */
+  justify-content: flex-end; /* Alinha à direita */
+  gap: 2px; /* Espaçamento entre os elementos */
+  height: 40px; /* Define uma altura fixa para o container, ajuste conforme necessário */
+}
+
+
+
+.search-button {
+  width: px;
+  /* Tamanho do botão */
+  height: 50px;
+  margin-bottom: 10px;
+  /* Tamanho do botão */
+  border-radius: 50%;
+  /* Botão redondo */
+  border: none;
+  background-color: #5f6cad;
+  /* Cor padrão (Decks) */
+  color: #faf7d5;
+  /* Cor do ícone */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  /* Sombra sutil */
+  font-size: 18px;
+  /* Tamanho do ícone */
+}
+
+.search-button.cards {
+  background-color: #454e7e;
+  /* Cor para Cards */
+}
+
+.search-button:hover {
+  opacity: 0.9;
+  /* Efeito de hover */
+}
+
+.search-text {
+  font-size: 16px;
+  color: #faf7d5;
+  /* Cor do texto */
+}
+
+.dashboard-actions {
+  grid-column: 1 / -1;
+  /* Ocupa toda a largura */
+  display: flex;
+  gap: 10px;
+  /* Espaçamento entre os botões */
+  display: flex;
+  justify-content: space-between; /* Distribui os botões de forma igual entre a esquerda e a direita */
+  gap: 10px; /* Espaçamento entre os botões */
+  /* Alinha os botões à esquerda */
+}
+
+.dashboard-actions .dashboard-button {
+  margin: 5px; /* Para um espaçamento mais suave entre os botões */
+}
+
+.dashboard-actions-right {
+  margin-left: auto; /* Alinha os botões à direita */
+}
+
+.dashboard-button {
+  padding: 10px 20px;
+  color: #faf7d5;
+  background-color: #8195de;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.dashboard-button:hover {
+  background-color: #adc2fb;
+  transform: scale(1.05);
+}
+
+.search-input {
+  padding: 8px;
+  font-size: 14px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  margin-right: 10px;
+}
+
+
+.dashboard-row {
+  grid-column: 1 / -1;
+  /* Ocupa toda a largura */
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  /* 3 colunas */
+  gap: 15px;
+  /* Espaçamento entre as seções */
+}
+.dashboard-section button {
+  align-self: flex-start; /* Alinha o botão à esquerda */
+  width: fit-content; /* Mantém o tamanho do botão proporcional ao texto */
+  height: auto; /* Evita que ele estique verticalmente */
+  padding: 12px 20px; /* Aumenta o espaço interno para um botão maior */
+  font-size: 16px; /* Aumenta o tamanho da fonte */
+  margin-top: 2px; /* Ajusta a distância do texto acima */
+}
+
+
+
+.dashboard-section {
+  padding: 15px;
+  /* Padding interno reduzido */
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  /* Cantos mais arredondados */
+  text-align: left;
+  background-color: #5f6cad;
+  /* Cor padrão para as seções */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 150px;
+  /* Altura reduzida */
+}
+
+#decks {
+  background: linear-gradient(135deg, #5f6cad, #6f7dbd);
+}
+
+#cards {
+  background: linear-gradient(135deg, #454e7e, #5a69a0);
+}
+
+#profile {
+  background: linear-gradient(135deg, #201b1b, #3a3232);
+}
+
+.dashboard-section h2 {
+  font-size: 18px;
+  /* Tamanho da fonte dos subtítulos */
+  margin: 0 0 10px 0;
+  /* Espaçamento abaixo dos subtítulos */
+  font-weight: bold;
+}
+
+.dashboard-section p {
+  font-size: 14px;
+  /* Tamanho da fonte dos parágrafos */
+  margin: 5px 0;
+  /* Espaçamento entre os parágrafos */
+}
+
+.dashboard-stats {
+  grid-column: 1 / -1;
+  /* Ocupa toda a largura */
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  /* 2 colunas */
+  gap: 15px;
+  /* Espaçamento entre os cards */
+}
+
+.stat-card {
+  padding: 15px;
+  /* Padding interno */
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  text-align: center;
+  background-color: #5f6cad;
+  /* Cor padrão */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100px;
+  /* Altura reduzida */
+}
+
+.stat-card h2 {
+  font-size: 20px;
+  /* Tamanho da fonte do título */
+  margin: 0;
+}
+
+.stat-card p {
+  font-size: 14px;
+  /* Tamanho da fonte do parágrafo */
+  margin: 10px 0 0;
+}
+
+
+.dashboard-lists {
+  grid-column: 1 / -1;
+  /* Ocupa toda a largura */
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  /* 2 colunas */
+  gap: 15px;
+  /* Espaçamento entre as listas */
+}
+
+.list-section {
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #5f6cad;
+  /* Cor padrão */
+}
+
+.list-section h3 {
+  font-size: 18px;
+  margin: 0 0 10px 0;
+}
+
+.list-section ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.list-section li {
+  font-size: 14px;
+  margin: 5px 0;
+}
+
+button {
+  padding: 8px 16px;
+  /* Padding reduzido */
+  color: #faf7d5;
+  background-color: #262b42;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-top: 10px;
+  /* Espaçamento acima dos botões */
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+  background-color: #8195de;
+  transform: scale(1.05);
+}

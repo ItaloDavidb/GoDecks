@@ -53,6 +53,7 @@ form textarea {
 .login-form-button {
   display: flex;
   justify-content: space-between;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .login-form button {
@@ -73,6 +74,7 @@ form textarea {
 
 .login-form button:hover {
   background-color: #8195de;
+  transform: scale(1.05);
 }
 
 .login-form .error {
